@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "knex": "knex",
+    "heroku-postbuild": "knex migrate:rollback; knex migrate:latest; knex seed:run;",
+    "nodemon": "nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -16,5 +19,7 @@
     "knex": "^0.15.2",
     "morgan": "~1.9.0",
     "pg": "^7.5.0"
-  }
+  },
+  "engines": {
+    "node": "v7.7.2"  }
 }
