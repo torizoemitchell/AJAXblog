@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 function makeBlogEntries(event){
+  //console.log("makeBlogEntries")
   //delete any existing entries
   removeEntriesFromDOM()
-  // let contentArea = document.getElementById('blog-content')
   //populate existing entries
   axios.get('/blogtable').then((response) => {
     //console.log(response)
@@ -89,22 +89,25 @@ function makeBlogEntries(event){
 }
 
 function createPost(event){
+//  console.log("CreatePost")
+  //show the form
   let form = document.getElementById('create-form')
   form.hidden = false
+  //add event listener to submit-button
   let submit = document.getElementById('submit-button')
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    console.log("SUBMIT")
-    //add info from form to database
+    event.stopImmediatePropagation()
+  //  console.log("Submit")
+    //create data structure to post to database
     let formElements = event.target.elements
-    console.log("formElements: ", formElements)
     let data = {
       title: formElements[0].value,
       content: formElements[1].value
     }
-    console.log('data:', data)
+    //console.log('data:', data)
     axios.post('/blogTable', data).then((results) => {
-      console.log(results)
+      //console.log("POST")
       removeEntriesFromDOM()
       makeBlogEntries()
       form.hidden = true
@@ -114,10 +117,11 @@ function createPost(event){
 }
 
 function removeEntriesFromDOM(){
+  //console.log("removeEntriesFromDOM")
   //remove current children
   let content = document.getElementById('blog-content')
   let contentChildren = content.children
-  console.log("content children", contentChildren)
+  //console.log("content children", contentChildren)
   while(content.firstChild){
     content.removeChild(content.firstChild)
   }
@@ -128,26 +132,26 @@ function removeEntriesFromDOM(){
 }
 
 function editPost(event){
-  console.log("EDIT")
+  //console.log("EDIT")
   let idToEdit = event.target.id
-  console.log("idToEdit: ", idToEdit)
+  //console.log("idToEdit: ", idToEdit)
   let form = document.getElementById('create-form')
   form.hidden = false
   let submit = document.getElementById('submit-button')
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    console.log("SUBMIT")
+    //console.log("SUBMIT")
     //add info from form to database
     let formElements = event.target.elements
-    console.log("formElements: ", formElements)
+    //console.log("formElements: ", formElements)
     let data = {
       title: formElements[0].value,
       content: formElements[1].value
     }
-    console.log('data:', data)
+    //console.log('data:', data)
     axios.put(`/blogtable/${idToEdit}`, data)
       .then((results) => {
-        console.log(results)
+        //console.log(results)
         removeEntriesFromDOM()
         makeBlogEntries()
         form.hidden = true
@@ -157,8 +161,8 @@ function editPost(event){
 }
 
 function deletePost(event){
-  console.log("DELETE")
-  console.log('id to delete: ', event.target.id)
+//  console.log("DELETE")
+  //console.log('id to delete: ', event.target.id)
   let idToDel = event.target.id
   axios.delete(`/blogtable/${idToDel}`)
     .then((results) => {
